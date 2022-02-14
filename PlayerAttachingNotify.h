@@ -1,5 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+Called when a weapon is being equiped or unequiped
+*/
 #pragma once
 
 #include "CoreMinimal.h"
