@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "NotifieWeaponDamageTracer.h"
 #include "WeaponActor.h"
@@ -15,6 +13,9 @@ void UNotifieWeaponDamageTracer::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 	}
 	else
 	{
+		/*
+		Since both player and enemy use the same damage tracer
+		*/
 		UE_LOG(LogTemp, Error, TEXT("(NotifieWeaponDamageTracer) Casting to weapon failed."));
 		AZombieChar* enemy = Cast<AZombieChar>(MeshComp->GetOwner());
 		if (enemy)
