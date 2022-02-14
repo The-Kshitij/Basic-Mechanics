@@ -1,5 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+This is called when a weapon fires
+*/
 #pragma once
 
 #include "CoreMinimal.h"
