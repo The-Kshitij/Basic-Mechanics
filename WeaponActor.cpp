@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+
 
 
 #include "WeaponActor.h"
@@ -9,7 +9,6 @@
 // Sets default values
 AWeaponActor::AWeaponActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	BodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Body of weapon"));
 	SetRootComponent(BodyMesh);
@@ -22,6 +21,7 @@ void AWeaponActor::BeginPlay()
 	CurrentAmmo = MaxAmmo;
 	CurrentMag = MaxMag;
 
+	//dont want to damage the player or the weapon
 	CollisionParams.AddIgnoredActor(this);
 	CollisionParams.AddIgnoredActor(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
 }
@@ -77,6 +77,7 @@ void AWeaponActor::Reload()
 
 	UE_LOG(LogTemp,Warning,TEXT("(WeaponActor) Starting to reload"));
 	StopFiring();
+	
 	//just as a precaution, rather than having current mag !=0 doing this, because it can be somehow that the current mag becomes less than zero.
 	if (CurrentAmmo != MaxAmmo && CurrentMag > 0)
 	{
@@ -128,6 +129,5 @@ void AWeaponActor::LineTraceForDamage()
 	else
 	{
 		UE_LOG(LogTemp,Warning,TEXT("(WeaponActor) Nothing has been hit."));
-	}
-	//DrawDebugLine(GetWorld(),StartPoint,EndPoint,FColor::Red,true,3.0f);
+	}	
 }
