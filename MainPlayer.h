@@ -107,6 +107,9 @@ private:
 		float CameraZoominInValue;
 	UPROPERTY(EditAnywhere)
 		float CameraNormalValue;
+		
+	UPROPERTY(EditAnywhere)
+		float MaxHealth = 100.f;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AWeaponActor> BaseballClass;
