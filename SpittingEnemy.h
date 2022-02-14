@@ -1,5 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+This type of enemy maintains its distance from the player and spits a ball of poison at the player after certain time intervals
+*/
 #pragma once
 
 #include "CoreMinimal.h"
@@ -34,9 +35,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void SetbSpitting(bool val);
 
+	//spawns the ball of poison
 	void SpawnDamagingBall();
 private:
 	float Health;
+	
+	//controls the rate at which the body of the enemy dissociates after it is dead
 	UPROPERTY(EditAnywhere)
 		float disappearingFactor = 0.01f;
 	bool bSpitting;
@@ -46,12 +50,18 @@ private:
 	class AAIController* customAIController;
 	class UMaterialInstanceDynamic* dynamicMat;
 
+	//function to spit a ball of poison at the player
 	UFUNCTION(BlueprintCallable)
 		void SpitBall();
+		
+	//returns if the enemy is spitting or not
 	UFUNCTION(BlueprintCallable)
 		bool GetbSpitting();
+		
+	//returns if the enemy is dead
 	UFUNCTION(BlueprintCallable)
 		bool GetbDead();
 
+	//damage handler of this enemy, called when enemy receives a damage
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };
