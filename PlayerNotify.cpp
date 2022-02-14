@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PlayerNotify.h"
 #include "MainPlayer.h"
 
@@ -38,17 +35,7 @@ void UPlayerNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("(PlayerNotify) Setting UnEquipMelee to false"));
 		player->SetbUnEquipingMelee(false);
-	}
-	/*else if (AnimationName.Compare("P_PistolAim") == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("(PlayerNotify) Calling FireIfPossible."));
-		player->FireIfPossible();
-	}*/
-	/*else if (AnimationName.Compare("P_PistolAim_Moving") == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("(PlayerNotify) Calling DoneAttack."));
-		player->DoneAttackFunction();
-	}*/
+	}	
 	else
 	{
 		UE_LOG(LogTemp,Error,TEXT("No case in PlayerNotify found for this AnimationName."));
