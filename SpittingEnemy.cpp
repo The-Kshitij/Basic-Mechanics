@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SpittingEnemy.h"
 #include "Kismet/GameplayStatics.h"
 #include "AIController.h"
@@ -11,8 +8,7 @@
 
 // Sets default values
 ASpittingEnemy::ASpittingEnemy()
-{
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+{ 	
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -38,6 +34,9 @@ void ASpittingEnemy::BeginPlay()
 void ASpittingEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	/*
+	The below code, gives a dissociation effect the body of the enemy once it is dead
+	*/
 	if (bDead)
 	{
 		if (dynamicMat)
@@ -81,6 +80,7 @@ void ASpittingEnemy::SpawnDamagingBall()
 	{
 		UE_LOG(LogTemp,Warning,TEXT("(SpittingEnemy) Ball spawned"));
 
+		//calculating a parabolic path to the player
 		FVector StartPoint = PlayerPawn->GetActorLocation();
 		StartPoint.Z = ball->GetActorLocation().Z; //making the z values same, the goal is to make a parbolic projectile towards player
 		ball->TargetLocation = StartPoint;
@@ -128,6 +128,7 @@ float ASpittingEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 			DetachFromControllerPendingDestroy();
 			if (GetMesh() != nullptr)
 			{
+				//creating a dynamic mat, because don't want to destroy the enemy right away, instead slowly dissociate
 				UMaterialInterface* skinMat = GetMesh()->GetMaterial(0);
 				dynamicMat = UMaterialInstanceDynamic::Create(skinMat, GetMesh());
 				GetMesh()->SetMaterial(0, dynamicMat);
