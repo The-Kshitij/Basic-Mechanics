@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -23,35 +21,50 @@ protected:
 
 public:	
 	bool bFiring;
+	
+	//returns if the weapon is firing or not
 	UFUNCTION(BlueprintCallable)
 		bool GetbFiring();
+		
 	UPROPERTY(EditAnywhere)
 		int MaxAmmo;
 	UPROPERTY(EditAnywhere)
 		int MaxMag;
+
 	int CurrentAmmo;
 	int CurrentMag;
 
+	//function for performing line trace 
 	void LineTraceForDamage();
 
 	class AMainPlayer* Player;
 	void SetPlayerRef(AMainPlayer* player);
+	
+	//function to reduce the ammo of the player, like when a shot is fired
 	void ReduceAmmo();
+	
+	//function to reload the weapon
 	void Reload();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override; 
-	//although this can be done from code, but it was behaving slightly so doind this in blueprint
+	
+	//although this can be done from code, but it was behaving slightly so doing this in blueprint
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void PlayReloadAnimation();
+	
+	//looping is set to true if this is an automatic weapon
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
-		void FireGun(bool looping,bool shoulddelay);//set looping true if this is an automatic weapon
+		void FireGun(bool looping,bool shoulddelay);
+	
+	//stop firing the weapon
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StopFiring();
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 		USkeletalMeshComponent* BodyMesh;
 private:
+	//parameters used for line tracing
 	FCollisionQueryParams CollisionParams;
 
 	UPROPERTY(EditAnywhere)
