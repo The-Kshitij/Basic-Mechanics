@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "CustomWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/ProgressBar.h"
@@ -14,9 +11,6 @@ bool UCustomWidget::Initialize()
 		{
 			bSuccess = false;
 		}
-	}
-	if (bSuccess)
-	{
 		UE_LOG(LogTemp,Warning,TEXT("(CustomWidget)Initialization of CustomWidget successfull"));
 	}
 	else
