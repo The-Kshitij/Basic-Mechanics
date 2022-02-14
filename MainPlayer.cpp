@@ -1,23 +1,27 @@
+/*
+The header file for this consists of what each and every function does and also explains the mechanics achieved using this
+*/
 #include "MainPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
-//#include "DrawDebugHelpers.h"
+
 
 #include "WeaponActor.h"
 #include "CustomWidget.h"
 
 // Sets default values
 AMainPlayer::AMainPlayer()
-{
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+{ 	
 	PrimaryActorTick.bCanEverTick = true;
+	//assigning the object to variable directly using code instead of using an editor
 	ConstructorHelpers::FClassFinder<UUserWidget> PlayerScreenClass(TEXT("/Game/Widgets/BP_PlayerScreen"));
 	ScreenWidgetClass = PlayerScreenClass.Class;
+	
 	if (ScreenWidgetClass==nullptr)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("(MainPlayer) screen widget class is nullptr., maybe you changed the path"));
+		UE_LOG(LogTemp,Warning,TEXT("(MainPlayer) screen widget class is nullptr., maybe path has been changed"));
 	}
 	else
 	{
@@ -42,7 +46,9 @@ void AMainPlayer::BeginPlay()
 	bAiming = false;
 	WeaponEquiped = 0;
 	PunchNum = 0;
-	Health = 100.0f;
+	Health = MaxHealth;
+	
+	
 	//getting the player's camera, for implementing the zoom.
 	TArray<UCameraComponent*> Cameras;
 	GetComponents(Cameras);
@@ -60,6 +66,7 @@ void AMainPlayer::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("(MainPlayer)Assigned fps cam."));
 		}
 	}
+	
 
 	//spawning and attaching the custom classes
 	BaseballPtr = GetWorld()->SpawnActor<AWeaponActor>(BaseballClass);
@@ -248,25 +255,9 @@ void AMainPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (bJumping)
 	{
+		//checking if the player has landed or not
 		LineTraceForGround();
 	}
-	/*if (bEquipingMelee)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("(MainPlayer) EquipingMelee is true."));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("(MainPlayer) EquipingMelee is false."));
-	}
-
-	if (bUnEquipingMelee)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("(MainPlayer) UnEquipingMelee is true."));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("(MainPlayer) UnEquipingMelee is false."));
-	}*/
 }
 
 // Called to bind functionality to input
@@ -298,6 +289,7 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction(TEXT("Crouch"),IE_Pressed,this,&AMainPlayer::CrouchFunction);
 }
 
+
 void AMainPlayer::StartAutomaticFire()
 {
 	if (!bReloading && !bJumping && !bEquipingMelee && !bUnEquipingMelee)
@@ -315,6 +307,7 @@ void AMainPlayer::StartAutomaticFire()
 		}
 	}
 }
+
 
 void AMainPlayer::DoneAutomaticFire()
 {
@@ -460,48 +453,13 @@ void AMainPlayer::MoveRightLeft(float val)
 	}
 }
 
-//bool AMainPlayer::GetbFiring()
-//{
-//	return bFiring;
-//}
-
-//void AMainPlayer::SetbFiring(bool val)
-//{
-//	bFiring = val;
-//	SetbAttacking(val);
-//	if (val)
-//	{
-//		UE_LOG(LogTemp,Warning,TEXT("(MainPlayer) setting bFiring to true"));
-//		if (WeaponEquiped == 2)
-//		{
-//		}
-//	}
-//	else
-//	{
-//		UE_LOG(LogTemp,Warning,TEXT("(MainPlayer) setting bFiring to false"));
-//	}
-//}
-
-/*
-void AMainPlayer::FireIfPossible()
-{	
-	if (bAttacking)
-	{
-		if (PistolPtr && WeaponEquiped == 2)
-		{
-			PistolPtr->FireGun(false);
-			DoneAttackFunction();
-		}
-	}
-}
-*/
 
 void AMainPlayer::JumpFunction()
 {
 	if (!bJumping && !bEquipingMelee && !bUnEquipingMelee && !bReloading)
 	{
 		ACharacter::Jump();
-		//if jumping, then we want to stop all other animations, only allow them to zoom in or out.
+		//if jumping, then stopping all other animations, only allow them to zoom in or out.
 		SetbJumping(true);
 		DoneAutomaticFire();
 		DoneAttackFunction();
@@ -513,8 +471,8 @@ void AMainPlayer::JumpFunction()
 
 void AMainPlayer::LineTraceForGround()
 {
-	FVector StartLocation = GetActorLocation();
-	StartLocation.Z -= 50.0f;
+	FVector StartLocation = GetActorLocation();	
+	StartLocation.Z -= 50.0f; //custom number found using trial and error
 	FVector EndLocation = StartLocation;
 	EndLocation.Z -= 45;
 	//DrawDebugLine(GetWorld(),StartLocation,EndLocation,FColor::Red,true,2.0f);
@@ -662,18 +620,6 @@ void AMainPlayer::StartAttackFunction()
 				SetStandingAttack(true);
 			}
 		}
-		//else if (!bJumping && !bAttacking && !bEquipingMelee && !bUnEquipingMelee && WeaponEquiped == 2)
-		//{
-		//	UE_LOG(LogTemp, Warning, TEXT("(MainPlayer) going to set firing to true"));
-		//	SetbAttacking(true);
-
-		//	//don't want the player to move in between a standing still firing animation.
-		//	/*if (!bMovingForward && !bMovingRight)
-		//	{
-		//		SetStandingAttack(true);
-		//	}*/
-		//	//SetbFiring(true);
-		//}
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("(MainPlayer) No case for this type of attack"));
@@ -1004,6 +950,7 @@ float AMainPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& Dam
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	Health -= DamageAmount;
+	//DamageAmount with value 5 means that the player was poisoned
 	if (DamageAmount == 5.0f)
 	{
 		ShowDamageEffect();
