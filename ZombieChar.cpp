@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "ZombieChar.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -8,8 +5,7 @@
 
 // Sets default values
 AZombieChar::AZombieChar()
-{
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+{ 	
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -32,6 +28,9 @@ void AZombieChar::BeginPlay()
 void AZombieChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	//once the enemy is dead, dont want the enemy is disappear directly or stay there forever, instead slowly dissociate into the air, the following code handles the 
+	//dissociation
 	if (bDead)
 	{
 		if (dynamicMat)
@@ -74,6 +73,7 @@ bool AZombieChar::GetbDead()
 	return bDead;
 }
 
+//called in behaviour tree from  a task
 void AZombieChar::AttackPlayer()
 {
 	if (!bHit)
