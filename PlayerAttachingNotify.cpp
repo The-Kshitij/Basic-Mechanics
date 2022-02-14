@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PlayerAttachingNotify.h"
 
 #include "MainPlayer.h"
@@ -15,6 +12,9 @@ void UPlayerAttachingNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	}
 
 	FString AnimationName = Animation->GetName();
+	/*
+	The code below is dependent on the animation
+	*/
 	if (AnimationName.Compare("P_Equip_from_back") == 0 || AnimationName.Compare("P_GrabPistol") == 0)
 	{
 		player->AttachWeaponToHand();
