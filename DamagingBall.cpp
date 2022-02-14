@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "DamagingBall.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -8,8 +5,7 @@
 
 // Sets default values
 ADamagingBall::ADamagingBall()
-{
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+{ 	
 	PrimaryActorTick.bCanEverTick = true;
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body of ball"));
 	SetRootComponent(BodyMesh);
@@ -40,6 +36,7 @@ void ADamagingBall::Tick(float DeltaTime)
 	//DrawDebugLine(GetWorld(),InitialLocation,newLocation,FColor::Blue,true,3.0f);
 	float z = ZCurve->GetFloatValue(t);
 	
+	//bRaising is used to ensure that the gun doesn't fire before the player has transitioned into a shooting pose
 	if (bRaising && FMath::IsNearlyEqual(TotalTime * 0.5f, t, 0.01f))
 	{
 		bRaising = false;
