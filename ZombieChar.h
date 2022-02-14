@@ -1,5 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+The zombie attacks the player if it saw the player, otherwise it moves randomly. This task of movement and perception of seeing the player is handled in blueprint using ai 
+perception component, blackboard and assigning tasks in the behaviour tree. 
+*/
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,13 +28,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//set attacking
 	void SetbAttack(bool val);
+	
+	//set if dead or not
 	void SetbDead(bool val);
+	
+	//set if hit
 	void SetbHit(bool val);
-
+	
+	//function for attacking the player
 	UFUNCTION(BlueprintCallable)
 		void AttackPlayer();
 
+	//function to perform line trace and apply damage to the player
 	void LineTraceForDamage();
 
 private:
@@ -41,6 +50,7 @@ private:
 	bool bDead;
 	int AttackNum;
 	bool bHit;
+	
 	class UBlackboardComponent* currentBB;
 	class AAIController* customAIController;
 	class UMaterialInstanceDynamic* dynamicMat;
@@ -62,6 +72,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 		int GetAttackNum();
 
-
+	//damage handler
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };
